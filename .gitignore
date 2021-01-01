@@ -1,0 +1,6 @@
+.DS_Store
+res/
+.vscode/
+__pycache__/
+
+
