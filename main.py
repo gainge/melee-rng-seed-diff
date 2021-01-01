@@ -1,0 +1,103 @@
+# Taken from savestate's reddit post explaining Melee's RNG System
+# All credit goes to savestate and their hard work!
+
+#@804d5f90
+seed = 0x00000001
+
+#Gets inlined in both functions
+#This one is egregious because it ends up being called twice in each
+def get_seed():
+    global seed
+    return seed
+
+#Gets inlined in both functions
+#Uses a Linear Congruential Generator with a = 214013, c = 2531011, m = 2**32
+#Has a period of 2**32 which is optimal considering the modulus
+def next_seed():
+    global seed
+    seed = ((seed * 214013) + 2531011) % 2**32
+
+#@80380580
+#Returns a value between 0 and max_val-1
+def get_random_int(max_val):
+    next_seed()
+    top_bits = get_seed() // 2**16
+    return (max_val * top_bits) // 2**16
+
+#@80380528
+#Returns an evenly spaced value between 0 and 65535/65536
+def get_random_float():
+    next_seed()
+    top_bits = get_seed() // 2**16
+    return top_bits / 65536
+
+
+def findSeedDifference(startSeed, targetSeed):
+    if startSeed == targetSeed: return 0
+
+    seed = startSeed
+    rollCount = 0
+
+    while True:
+        seed = ((seed * 214013) + 2531011) % 2**32
+        rollCount += 1
+        
+        if seed == targetSeed or seed == startSeed: break
+
+    # check for target hit or wraparound
+    if seed == targetSeed:
+        return rollCount
+    else:
+        return -1
+
+
+def isQuit(userInput):
+    return userInput == 'x' or userInput == 'X'
+
+
+def getUserHex(prompt='Please Enter Seed'):
+    while True:
+        userSeed = input(prompt)
+        # Return if quit sentinel is entered
+        if isQuit(userSeed): return userSeed
+
+        # Otherwise, validate the hex input
+        try:
+            intVal = int(userSeed, 16)
+            return intVal
+        except ValueError:
+            print()
+            print('!----- Please enter a hex value -----!')
+            
+
+def displayHexFromInt(val):
+    hexString = "{0:#0{1}x}".format(val,10).upper()
+
+    return f'0x{hexString[2:]}'
+
+print('==============================')
+print('Judge9 SSBM RNG Seed Diff Calc')
+print('==============================')
+while True:
+    print('Please Supply Seeds (x to quit)')
+    # Grab hex seeds from the user
+    startSeed = getUserHex('Please Enter First Seed: ')
+    if isQuit(startSeed): break
+
+    endSeed = getUserHex('Please Enter Second Seed: ')
+    if isQuit(endSeed): break
+
+    print()
+
+    diff = findSeedDifference(startSeed, endSeed)
+
+    if diff == -1:
+        print('Seed wraparound, please check input and try again')
+    else:
+        print(f'{displayHexFromInt(startSeed)} => {displayHexFromInt(endSeed)}')
+        print(f'Seed Diff: {diff}')
+        print('========================================')
+
+print('Exiting....')
+
+
