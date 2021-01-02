@@ -85,9 +85,9 @@ def display_hex_from_int(val):
 
     return f'0x{hexString[2:]}'
 
-print('==============================')
-print('Judge9 SSBM RNG Seed Diff Calc')
-print('==============================')
+print('=======================')
+print('SSBM RNG Seed Diff Calc')
+print('=======================')
 while True:
     print('Please Supply Seeds (x to quit)')
     # Grab hex seeds from the user
