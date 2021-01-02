@@ -35,7 +35,7 @@ def get_random_float():
     return top_bits / 65536
 
 
-def findSeedDifference(startSeed, targetSeed):
+def find_seed_difference(startSeed, targetSeed):
     if startSeed == targetSeed: return 0
 
     # Establish pointers at both start and target to handle case
@@ -59,17 +59,17 @@ def findSeedDifference(startSeed, targetSeed):
         return -1 * rollCount
 
 
-def isQuit(userInput):
+def is_quit(userInput):
     return userInput == 'x' or userInput == 'X'
 
 
-def getUserHex(prompt='Please Enter Seed'):
+def get_user_hex(prompt='Please Enter Seed'):
     while True:
         userSeed = input(prompt)
         userSeed = userSeed.replace(' ', '')
 
         # Return if quit sentinel is entered
-        if isQuit(userSeed): return userSeed
+        if is_quit(userSeed): return userSeed
 
         # Otherwise, validate the hex input
         try:
@@ -80,7 +80,7 @@ def getUserHex(prompt='Please Enter Seed'):
             print('!----- Please enter a hex value -----!')
             
 
-def displayHexFromInt(val):
+def display_hex_from_int(val):
     hexString = "{0:#0{1}x}".format(val,10).upper()
 
     return f'0x{hexString[2:]}'
@@ -91,20 +91,20 @@ print('==============================')
 while True:
     print('Please Supply Seeds (x to quit)')
     # Grab hex seeds from the user
-    startSeed = getUserHex('Please Enter First Seed: ')
-    if isQuit(startSeed): break
+    startSeed = get_user_hex('Please Enter First Seed: ')
+    if is_quit(startSeed): break
 
-    endSeed = getUserHex('Please Enter Second Seed: ')
-    if isQuit(endSeed): break
+    endSeed = get_user_hex('Please Enter Second Seed: ')
+    if is_quit(endSeed): break
 
     print()
 
-    diff = findSeedDifference(startSeed, endSeed)
+    diff = find_seed_difference(startSeed, endSeed)
 
     if diff == -1:
         print('Seed wraparound, please check input and try again')
     else:
-        print(f'{displayHexFromInt(startSeed)} => {displayHexFromInt(endSeed)}')
+        print(f'{display_hex_from_int(startSeed)} => {display_hex_from_int(endSeed)}')
         print(f'Seed Diff: {diff}')
         print('========================================')
 
