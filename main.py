@@ -58,6 +58,8 @@ def isQuit(userInput):
 def getUserHex(prompt='Please Enter Seed'):
     while True:
         userSeed = input(prompt)
+        userSeed = userSeed.replace(' ', '')
+
         # Return if quit sentinel is entered
         if isQuit(userSeed): return userSeed
 
