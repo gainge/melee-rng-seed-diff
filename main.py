@@ -17,6 +17,9 @@ def next_seed():
     global seed
     seed = ((seed * 214013) + 2531011) % 2**32
 
+def advance_seed(seed):
+    return ((seed * 214013) + 2531011) % 2**32
+
 #@80380580
 #Returns a value between 0 and max_val-1
 def get_random_int(max_val):
@@ -35,20 +38,25 @@ def get_random_float():
 def findSeedDifference(startSeed, targetSeed):
     if startSeed == targetSeed: return 0
 
-    seed = startSeed
+    # Establish pointers at both start and target to handle case
+    # where start is ahead of target
+    seedFromStart = startSeed
+    seedFromTarget = targetSeed
     rollCount = 0
 
     while True:
-        seed = ((seed * 214013) + 2531011) % 2**32
+        seedFromStart = advance_seed(seedFromStart)
+        seedFromTarget = advance_seed(seedFromTarget)
         rollCount += 1
         
-        if seed == targetSeed or seed == startSeed: break
+        if seedFromStart == targetSeed or seedFromTarget == startSeed: break
 
-    # check for target hit or wraparound
-    if seed == targetSeed:
+    # check if target was reached from start
+    if seedFromStart == targetSeed:
         return rollCount
     else:
-        return -1
+        # Starting seed was ahead of target, return negative offset
+        return -1 * rollCount
 
 
 def isQuit(userInput):
