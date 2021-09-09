@@ -3,6 +3,7 @@
 
 #@804d5f90
 seed = 0x00000001
+M = 2**32
 
 #Gets inlined in both functions
 #This one is egregious because it ends up being called twice in each
@@ -18,7 +19,7 @@ def next_seed():
     seed = ((seed * 214013) + 2531011) % 2**32
 
 def advance_seed(seed):
-    return ((seed * 214013) + 2531011) % 2**32
+    return ((seed * 214013) + 2531011) % M
 
 #@80380580
 #Returns a value between 0 and max_val-1
